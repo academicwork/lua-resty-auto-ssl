@@ -1,5 +1,11 @@
 # lua-resty-auto-ssl Change Log
 
+## 0.14.0 - 2021-09-06
+
+### Changed
+- Random improvements ftw
+
+
 ## 0.13.1 - 2019-10-01
 
 ### Changed
