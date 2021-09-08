@@ -45,6 +45,7 @@ install: check-dependencies
 	install -m 644 lib/resty/auto-ssl/storage.lua $(INST_LUADIR)/resty/auto-ssl/storage.lua
 	install -d $(INST_LUADIR)/resty/auto-ssl/storage_adapters
 	install -m 644 lib/resty/auto-ssl/storage_adapters/file.lua $(INST_LUADIR)/resty/auto-ssl/storage_adapters/file.lua
+	install -m 644 lib/resty/auto-ssl/storage_adapters/consul.lua $(INST_LUADIR)/resty/auto-ssl/storage_adapters/consul.lua
 	install -m 644 lib/resty/auto-ssl/storage_adapters/redis.lua $(INST_LUADIR)/resty/auto-ssl/storage_adapters/redis.lua
 	install -d $(INST_LUADIR)/resty/auto-ssl/utils
 	install -m 644 lib/resty/auto-ssl/utils/parse_openssl_time.lua $(INST_LUADIR)/resty/auto-ssl/utils/parse_openssl_time.lua
