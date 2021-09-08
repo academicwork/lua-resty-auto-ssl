@@ -136,7 +136,7 @@ function _M.get_connection(self)
 
   connection = consul:new(self.options)
 
-  dump({fn = '_M.get_connection', connection = connection}, '_M.get_connection')
+  -- dump({fn = '_M.get_connection', connection = connection}, '_M.get_connection')
 
   ngx.ctx.auto_ssl_consul_connection = connection
   return connection
@@ -159,6 +159,7 @@ function _M.get(self, key)
 
   -- Redis use get, Consul use get_key
   -- Redis 'res' is value or nil; Consul is a lua-resty-http response object
+  ngx.log("\n\nAttempting to GET " .. prefixed_key(self, key) .. "from Consul.\n\n")
   local res, err = connection:get_key(prefixed_key(self, key))
 
   if res.status ~= 404 and res.body[1] ~= nil and res.body[1]['Value'] ~= nil then
@@ -205,14 +206,12 @@ function _M.set(self, key, value, options)
         local _, delete_err = _M.delete(self, key)
         if delete_err then
           ngx.log(ngx.ERR, "auto-ss.lstorage_adapter.consul._M.delete: failed to remove the key from Consul after the expiretime ", delete_err)
-        else
-          dump({fn = '_M.set', _=_, delete_err=delete_err, 'ngx.timer worked!'})
         end
       end)
     end
   end
 
-  dump({fn = '_M.set', ok=ok, key=key, value=value, options=options, res=res, err=err}, '_M.set')
+  -- dump({fn = '_M.set', ok=ok, key=key, value=value, options=options, res=res, err=err}, '_M.set')
   return ok, err
 end
 
@@ -232,7 +231,7 @@ function _M.delete(self, key)
   -- local cjson = require "cjson"
   -- ngx.log(ngx.ERR, '_M.delete: ', connection_err)
   -- ngx.log(ngx.ERR, cjson.encode(connection_err))
-  ngx.log(ngx.DEBUG, "auto-ssl deleted key: " .. key)
+  --ngx.log(ngx.DEBUG, "auto-ssl deleted key: " .. key)
 
   -- Redis use del, Consul uses delete_key
   return connection:delete_key(prefixed_key(self, key))
@@ -269,7 +268,6 @@ function _M.keys_with_suffix(self, suffix)
       if match == nil then
         goto continue
       end
-
       table.insert(keys_with_suffix, key)
 
       ::continue::
@@ -283,12 +281,11 @@ function _M.keys_with_suffix(self, suffix)
     -- Remove prefix from key so that only the actual key remains.
     for _, key in ipairs(keys_with_suffix) do
       local unprefixed = string.sub(key, offset)
-      -- ngx.log(ngx.ERR, '          UNPREFIXED KEY: ', unprefixed)
 
       table.insert(unprefixed_keys, unprefixed)
 
     end
-    result = keys_with_suffix
+    result = unprefixed_keys
 
   end
 
