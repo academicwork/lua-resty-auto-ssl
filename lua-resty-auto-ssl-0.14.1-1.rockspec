@@ -1,8 +1,8 @@
 package = "lua-resty-auto-ssl"
-version = "0.14.0-1"
+version = "0.14.1-1"
 source = {
   url = "git://github.com/academicwork/lua-resty-auto-ssl.git",
-  tag = "v0.14.0",
+  tag = "v0.14.1",
 }
 description = {
   summary = "Automatic SSL handling for OpenResty",
